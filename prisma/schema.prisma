@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  name      String
+  uni       String     @unique @default("abc1234")
+  image     String?    @default("")
+  bio       String?    @default("")
+  pronouns  String?    @default("")
+  sexuality String?    @default("")
+  instagram String?    @default("")
+  school    String?    @default("")
+  major     String?    @default("")
+  eggs      String?    @default("")
+  hidden    Boolean    @default(false)
+  scrambles Scramble[]
+  createdAt DateTime   @default(now())
+}
+
+model Scramble {
+  id          Int      @id @default(autoincrement())
+  uni         String
+  displayType String
+  matched     Boolean  @default(false)
+  User        User     @relation(fields: [userId], references: [id])
+  userId      Int
+  isRoundOne  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
